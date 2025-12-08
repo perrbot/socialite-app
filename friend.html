@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends - Socialite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../src/components/Friends.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #ED64A6, #9F7AEA);
+            padding: 15px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar a.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Socialite</h1>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="Profile.html">Profile</a>
+            <a href="Friends.html" class="active">Friends</a>
+            <a href="Chat.html">Chat</a>
+            <a href="Settings.html">Settings</a>
+        </div>
+    </nav>
+
+    <div class="friends-container">
+        <div class="friends-header">
+            <h1>My Friends</h1>
+            <div class="friends-search">
+                <input
+                    type="text"
+                    placeholder="Search friends..."
+                    id="searchInput"
+                    class="search-input"
+                />
+                <i class="fas fa-search search-icon"></i>
+            </div>
+        </div>
+
+        <div class="friends-stats">
+            <div class="stat">
+                <span class="stat-number" id="totalFriends">4</span>
+                <span class="stat-label">Total Friends</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number" id="onlineFriends">2</span>
+                <span class="stat-label">Online</span>
+            </div>
+        </div>
+
+        <div class="friends-content">
+            <div class="friends-list" id="friendsList">
+                <!-- Friends will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock friends data
+        const friends = [
+            {
+                id: 1,
+                displayName: 'Alice Johnson',
+                email: 'alice@example.com',
+                photoURL: null,
+                status: 'online'
+            },
+            {
+                id: 2,
+                displayName: 'Bob Smith',
+                email: 'bob@example.com',
+                photoURL: null,
+                status: 'offline'
+            },
+            {
+                id: 3,
+                displayName: 'Charlie Brown',
+                email: 'charlie@example.com',
+                photoURL: null,
+                status: 'online'
+            },
+            {
+                id: 4,
+                displayName: 'Diana Prince',
+                email: 'diana@example.com',
+                photoURL: null,
+                status: 'away'
+            }
+        ];
+
+        let filteredFriends = [...friends];
+
+        // DOM elements
+        const searchInput = document.getElementById('searchInput');
+        const friendsList = document.getElementById('friendsList');
+        const totalFriendsEl = document.getElementById('totalFriends');
+        const onlineFriendsEl = document.getElementById('onlineFriends');
+
+        // Initialize
+        renderFriends();
+        updateStats();
+
+        // Event listeners
+        searchInput.addEventListener('input', handleSearch);
+
+        function handleSearch(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            filteredFriends = friends.filter(friend =>
+                friend.displayName.toLowerCase().includes(searchTerm)
+            );
+            renderFriends();
+        }
+
+        function renderFriends() {
+            friendsList.innerHTML = '';
+
+            if (filteredFriends.length === 0) {
+                friendsList.innerHTML = `
+                    <div class="no-friends">
+                        <i class="fas fa-users"></i>
+                        <p>No friends found matching your search</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredFriends.forEach(friend => {
+                const friendCard = document.createElement('div');
+                friendCard.className = 'friend-card';
+                friendCard.innerHTML = `
+                    <div class="friend-avatar">
+                        <img
+                            src="${friend.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(friend.displayName)}&background=ED64A6&color=fff&size=60`}"
+                            alt="${friend.displayName}"
+                        />
+                        <div
+                            class="status-indicator"
+                            style="background-color: ${getStatusColor(friend.status)}"
+                        ></div>
+                    </div>
+                    <div class="friend-info">
+                        <h3>${friend.displayName}</h3>
+                        <p class="friend-email">${friend.email}</p>
+                        <p class="friend-status">${friend.status}</p>
+                    </div>
+                    <div class="friend-actions">
+                        <button onclick="handleMessage(${friend.id})" class="action-btn message">
+                            <i class="fas fa-comment"></i>
+                            Message
+                        </button>
+                        <button onclick="handleUnfriend(${friend.id})" class="action-btn unfriend">
+                            <i class="fas fa-user-minus"></i>
+                            Unfriend
+                        </button>
+                    </div>
+                `;
+                friendsList.appendChild(friendCard);
+            });
+        }
+
+        function updateStats() {
+            totalFriendsEl.textContent = friends.length;
+            onlineFriendsEl.textContent = friends.filter(f => f.status === 'online').length;
+        }
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'online': return '#4CAF50';
+                case 'offline': return '#9E9E9E';
+                case 'away': return '#FF9800';
+                default: return '#9E9E9E';
+            }
+        }
+
+        function handleMessage(friendId) {
+            const friend = friends.find(f => f.id === friendId);
+            window.location.href = 'Chat.html?friend=' + friendId;
+        }
+
+        function handleUnfriend(friendId) {
+            if (confirm('Are you sure you want to unfriend this person?')) {
+                const index = friends.findIndex(f => f.id === friendId);
+                if (index > -1) {
+                    friends.splice(index, 1);
+                    filteredFriends = [...friends];
+                    renderFriends();
+                    updateStats();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
