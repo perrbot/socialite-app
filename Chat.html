@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Socialite - Elevate your vibe with luxury conversations and connected communities. 💎✨ #SocialiteGlowUp" />
+  <title>Socialite - Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" onerror="this.href='';document.body.style.fontFamily='sans-serif';">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center;
+      background: linear-gradient(135deg, #4C51BF, #ED64A6, #9F7AEA); overflow: hidden;
+    }
+    .chat-header { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 4vw; font-size: min(6vw, 20px); text-align: center; box-shadow: 0 3px 12px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: space-between; }
+    .friend-profile { display: flex; align-items: center; gap: 2vw; }
+    .friend-avatar { width: 50px; height: 50px; border-radius: 50%; background: #ED64A6; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; position: relative; }
+    .friend-avatar.online::after { content: ''; position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px; background: #48BB78; border: 2px solid white; border-radius: 50%; }
+    .friend-info { text-align: left; }
+    .friend-name { font-size: 1.2em; margin: 0; }
+    .friend-status { font-size: 0.9em; margin: 0; opacity: 0.8; }
+    .call-buttons { display: flex; gap: 10px; }
+    .call-btn { background: rgba(255, 255, 255, 0.2); border: none; border-radius: 50%; width: 40px; height: 40px; color: white; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+    .call-btn:hover { background: rgba(255, 255, 255, 0.4); transform: scale(1.1); }
+    .call-btn.audio { color: #48BB78; }
+    .call-btn.video { color: #ED64A6; }
+    .chat-box { padding: 4vw; height: calc(100vh - 26vh); overflow-y: auto; }
+    .message { margin-bottom: 3vh; padding: 3vw; border-radius: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.2); max-width: 70%; position: relative; }
+    .message.you { background: rgba(255, 255, 255, 0.3); color: #FFF; text-align: right; margin-left: 30%; }
+    .message.other { background: rgba(255, 255, 255, 0.2); color: #FFF; margin-right: 30%; }
+    .message::before { content: ''; position: absolute; width: 0; height: 0; border: 12px solid transparent; }
+    .message.you::before { border-left-color: rgba(255, 255, 255, 0.3); right: -12px; top: 12px; }
+    .message.other::before { border-right-color: rgba(255, 255, 255, 0.2); left: -12px; top: 12px; }
+    .input-area {
+      position: fixed; bottom: 12vh; left: 0; right: 0; padding: 3vw;
+      background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.4);
+      display: flex; gap: 2vw; box-shadow: 0 -3px 12px rgba(0,0,0,0.3); z-index: 5;
+    }
+    .input-area input {
+      flex: 1; padding: 3vw; border-radius: 25px; border: none; background: rgba(255, 255, 255, 0.2); color: #FFF; font-size: 4vw;
+      transition: all 0.3s ease;
+    }
+    .input-area input:focus { outline: none; background: rgba(255, 255, 255, 0.35); box-shadow: 0 0 20px rgba(159, 122, 234, 0.7); }
+    .input-area button {
+      background: linear-gradient(45deg, #ED64A6, #4C51BF); color: #FFF; border: none; padding: 3vw; width: 10vw; min-width: 48px; height: 10vw; min-height: 48px;
+      border-radius: 50%; font-size: 5vw; cursor: pointer; transition: all 0.4s ease; box-shadow: 0 0 15px rgba(237, 100, 166, 0.6);
+    }
+    .input-area button:hover { transform: scale(1.15); box-shadow: 0 0 25px rgba(237, 100, 166, 0.9); }
+    .input-area button:focus { outline: 2px solid #9F7AEA; outline-offset: 2px; }
+    .input-controls { display: flex; align-items: center; gap: 10px; margin-right: 10px; }
+    .input-btn { background: rgba(255, 255, 255, 0.2); border: none; border-radius: 50%; width: 40px; height: 40px; color: white; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+    .input-btn:hover { background: rgba(255, 255, 255, 0.4); transform: scale(1.1); }
+    .input-btn.active { background: #ED64A6; animation: pulse 1s infinite; }
+    .emoji-picker { position: absolute; bottom: 80px; right: 20px; background: white; border-radius: 10px; padding: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none; z-index: 10; }
+    .emoji-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+    .emoji { font-size: 1.5em; cursor: pointer; padding: 5px; border-radius: 5px; transition: all 0.2s ease; }
+    .emoji:hover { background: rgba(237, 100, 166, 0.1); transform: scale(1.2); }
+    .recording-indicator { display: none; background: #E53E3E; color: white; padding: 5px 10px; border-radius: 15px; font-size: 0.8em; animation: blink 1s infinite; }
+    @keyframes blink { 50% { opacity: 0.5; } }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    .loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #FFF; font-size: 5vw; display: none; animation: blink 1s infinite; }
+    @media (max-width: 480px) {
+      .chat-header { font-size: 7vw; padding: 3vw; }
+      .chat-box { height: calc(100vh - 28vh); padding: 3vw; }
+      .message { padding: 2.5vw; }
+      .input-area { padding: 2.5vw; bottom: 14vh; }
+      .input-area input { font-size: 4.5vw; padding: 2.5vw; }
+      .input-area button { font-size: 6vw; width: 12vw; height: 12vw; }
+    }
+    @keyframes blink { 50% { opacity: 0.5; } }
+    body.dark-mode { background: linear-gradient(135deg, #2D3748, #4A5568, #718096); }
+    body.dark-mode .message.you { background: rgba(200, 200, 200, 0.3); }
+    body.dark-mode .message.other { background: rgba(200, 200, 200, 0.2); }
+    body.dark-mode .input-area input { background: rgba(200, 200, 200, 0.2); }
+    body.dark-mode .input-area button { background: linear-gradient(45deg, #9F7AEA, #667EEA); }
+  </style>
+</head>
+<body>
+  <div class="chat-header" role="banner">
+    <div class="friend-profile" id="friendProfile">
+      <div class="friend-avatar" id="friendAvatar">?</div>
+      <div class="friend-info">
+        <p class="friend-name" id="friendName">Socialite Chat</p>
+        <p class="friend-status" id="friendStatus">Online</p>
+      </div>
+    </div>
+  </div>
+  <div class="chat-box" id="chatBox" aria-live="polite">
+    <div class="message other">Hello 👋</div>
+    <div class="message you">Hi, how are you?</div>
+  </div>
+  <div class="input-area">
+    <div class="input-controls">
+      <button class="input-btn" onclick="toggleEmojiPicker()" title="Emoji" aria-label="Open emoji picker">
+        <i class="fas fa-smile"></i>
+      </button>
+      <button class="input-btn" onclick="toggleVoiceRecording()" id="voiceBtn" title="Voice Message" aria-label="Record voice message">
+        <i class="fas fa-microphone"></i>
+      </button>
+      <button class="input-btn" onclick="attachFile()" title="Attach File" aria-label="Attach file">
+        <i class="fas fa-paperclip"></i>
+      </button>
+    </div>
+    <input type="text" id="chatInput" placeholder="Type your message..." aria-label="Chat input">
+    <button onclick="sendMessage()" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
+  </div>
+  <div class="emoji-picker" id="emojiPicker">
+    <div class="emoji-grid">
+      <span class="emoji" onclick="insertEmoji('😀')">😀</span>
+      <span class="emoji" onclick="insertEmoji('😂')">😂</span>
+      <span class="emoji" onclick="insertEmoji('❤️')">❤️</span>
+      <span class="emoji" onclick="insertEmoji('👍')">👍</span>
+      <span class="emoji" onclick="insertEmoji('👋')">👋</span>
+      <span class="emoji" onclick="insertEmoji('🎉')">🎉</span>
+      <span class="emoji" onclick="insertEmoji('🔥')">🔥</span>
+      <span class="emoji" onclick="insertEmoji('💯')">💯</span>
+      <span class="emoji" onclick="insertEmoji('🙌')">🙌</span>
+      <span class="emoji" onclick="insertEmoji('😍')">😍</span>
+      <span class="emoji" onclick="insertEmoji('🤔')">🤔</span>
+      <span class="emoji" onclick="insertEmoji('😢')">😢</span>
+    </div>
+  </div>
+  <div class="recording-indicator" id="recordingIndicator">Recording...</div>
+  <div class="loading" id="loading">Loading...</div>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" async></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" async></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js" async></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDdfcTtRD-HdvB_n_colrUWQI-FUZAiNh0",
+      authDomain: "socialite-bae96.firebaseapp.com",
+      projectId: "socialite-bae96",
+      storageBucket: "socialite-bae96.firebasestorage.app",
+      messagingSenderId: "871563265567",
+      appId: "1:871563265567:web:60b88ac1688f8af3ae372a",
+      measurementId: "G-5LN8406TPX"
+    };
+
+    let app, auth, analytics;
+    document.getElementById('loading').style.display = 'block';
+    setTimeout(() => {
+      try {
+        if (!window.firebaseApp) {
+          app = firebase.initializeApp(firebaseConfig);
+          auth = firebase.auth();
+          analytics = firebase.analytics(app);
+          window.firebaseApp = app;
+        } else {
+          app = window.firebaseApp;
+          auth = firebase.auth();
+          analytics = firebase.analytics(app);
+        }
+        document.getElementById('loading').style.display = 'none';
+        auth.onAuthStateChanged((user) => {
+          if (!user) window.location.replace('login.html');
+        });
+      } catch (e) {
+        console.error("Firebase initialization failed:", e);
+        document.getElementById('loading').textContent = 'Retry in progress...';
+        setTimeout(() => location.reload(), 2000);
+      }
+    }, 5000);
+
+    function loadFriendProfile() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const friendId = urlParams.get('friend');
+      if (friendId) {
+        // Mock friend data - in real app, fetch from backend
+        const friends = [
+          { id: 1, displayName: 'Alice Johnson', email: 'alice@example.com', status: 'online' },
+          { id: 2, displayName: 'Bob Smith', email: 'bob@example.com', status: 'offline' },
+          { id: 3, displayName: 'Charlie Brown', email: 'charlie@example.com', status: 'online' },
+          { id: 4, displayName: 'Diana Prince', email: 'diana@example.com', status: 'away' }
+        ];
+        const friend = friends.find(f => f.id == friendId);
+        if (friend) {
+          document.getElementById('friendName').textContent = friend.displayName;
+          document.getElementById('friendStatus').textContent = friend.status;
+          document.getElementById('friendAvatar').textContent = friend.displayName.charAt(0);
+        }
+      }
+    }
+
+    let mediaRecorder;
+    let audioChunks = [];
+    let isRecording = false;
+    let localStream;
+    let peerConnection;
+    let isInCall = false;
+
+    function sendMessage() {
+      const input = document.getElementById("chatInput");
+      const chatBox = document.getElementById("chatBox");
+      if (input.value.trim()) {
+        const msg = document.createElement("div");
+        msg.className = "message you";
+        msg.innerHTML = `<span>${input.value}</span><span class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>`;
+        chatBox.appendChild(msg);
+        input.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+        analytics.logEvent('chat_message_sent');
+      }
+    }
+
+    function toggleEmojiPicker() {
+      const picker = document.getElementById('emojiPicker');
+      picker.style.display = picker.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function insertEmoji(emoji) {
+      const input = document.getElementById('chatInput');
+      input.value += emoji;
+      document.getElementById('emojiPicker').style.display = 'none';
+      input.focus();
+    }
+
+    async function toggleVoiceRecording() {
+      const voiceBtn = document.getElementById('voiceBtn');
+      const indicator = document.getElementById('recordingIndicator');
+
+      if (!isRecording) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+
+          mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+          };
+
+          mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            sendVoiceMessage(audioBlob);
+            stream.getTracks().forEach(track => track.stop());
+          };
+
+          mediaRecorder.start();
+          isRecording = true;
+          voiceBtn.classList.add('active');
+          indicator.style.display = 'block';
+        } catch (error) {
+          console.error('Error accessing microphone:', error);
+          alert('Microphone access denied. Please allow microphone access to record voice messages.');
+        }
+      } else {
+        mediaRecorder.stop();
+        isRecording = false;
+        voiceBtn.classList.remove('active');
+        indicator.style.display = 'none';
+      }
+    }
+
+    function sendVoiceMessage(audioBlob) {
+      const chatBox = document.getElementById("chatBox");
+      const msg = document.createElement("div");
+      msg.className = "message you";
+      msg.innerHTML = `
+        <audio controls style="max-width: 200px;">
+          <source src="${URL.createObjectURL(audioBlob)}" type="audio/wav">
+        </audio>
+        <span class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+      `;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function attachFile() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*,video/*,audio/*,application/*';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          sendFileMessage(file);
+        }
+      };
+      input.click();
+    }
+
+    function sendFileMessage(file) {
+      const chatBox = document.getElementById("chatBox");
+      const msg = document.createElement("div");
+      msg.className = "message you";
+
+      if (file.type.startsWith('image/')) {
+        msg.innerHTML = `
+          <img src="${URL.createObjectURL(file)}" style="max-width: 200px; max-height: 200px; border-radius: 10px;">
+          <span class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+        `;
+      } else if (file.type.startsWith('video/')) {
+        msg.innerHTML = `
+          <video controls style="max-width: 200px;">
+            <source src="${URL.createObjectURL(file)}" type="${file.type}">
+          </video>
+          <span class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+        `;
+      } else {
+        msg.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-file"></i>
+            <span>${file.name}</span>
+            <a href="${URL.createObjectURL(file)}" download="${file.name}" style="color: #ED64A6;">Download</a>
+          </div>
+          <span class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+        `;
+      }
+
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function startAudioCall() {
+      if (isInCall) {
+        endCall();
+        return;
+      }
+
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        initiateCall('audio');
+      } catch (error) {
+        console.error('Error accessing microphone for call:', error);
+        alert('Microphone access required for audio calls.');
+      }
+    }
+
+    async function startVideoCall() {
+      if (isInCall) {
+        endCall();
+        return;
+      }
+
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+        initiateCall('video');
+      } catch (error) {
+        console.error('Error accessing camera/microphone for call:', error);
+        alert('Camera and microphone access required for video calls.');
+      }
+    }
+
+    function initiateCall(type) {
+      // Create call interface
+      const callInterface = document.createElement('div');
+      callInterface.id = 'callInterface';
+      callInterface.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div style="background: white; padding: 20px; border-radius: 15px; text-align: center; max-width: 300px;">
+            <h3>${type === 'video' ? 'Video' : 'Audio'} Call</h3>
+            <p>Calling ${document.getElementById('friendName').textContent}...</p>
+            <div style="margin: 20px 0;">
+              ${type === 'video' ? '<video id="localVideo" autoplay muted style="width: 100%; border-radius: 10px;"></video>' : '<div style="width: 100px; height: 100px; background: #ED64A6; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;"><i class="fas fa-phone" style="color: white; font-size: 2em;"></i></div>'}
+            </div>
+            <button onclick="endCall()" style="background: #E53E3E; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer;">End Call</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(callInterface);
+
+      if (type === 'video') {
+        document.getElementById('localVideo').srcObject = localStream;
+      }
+
+      isInCall = true;
+
+      // Simulate call connection after 2 seconds
+      setTimeout(() => {
+        const callDiv = callInterface.querySelector('div');
+        callDiv.innerHTML = `
+          <h3>${type === 'video' ? 'Video' : 'Audio'} Call Connected</h3>
+          <p>Connected with ${document.getElementById('friendName').textContent}</p>
+          <div style="margin: 20px 0;">
+            ${type === 'video' ? '<video id="localVideo" autoplay muted style="width: 100%; border-radius: 10px;"></video><video id="remoteVideo" autoplay style="width: 100%; border-radius: 10px; margin-top: 10px;"></video>' : '<div style="width: 100px; height: 100px; background: #48BB78; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;"><i class="fas fa-phone" style="color: white; font-size: 2em;"></i></div>'}
+          </div>
+          <button onclick="endCall()" style="background: #E53E3E; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer;">End Call</button>
+        `;
+
+        if (type === 'video') {
+          document.getElementById('localVideo').srcObject = localStream;
+          // In a real app, you'd set up WebRTC peer connection here
+        }
+      }, 2000);
+    }
+
+    function endCall() {
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+      }
+      const callInterface = document.getElementById('callInterface');
+      if (callInterface) {
+        callInterface.remove();
+      }
+      isInCall = false;
+    }
+
+    // Close emoji picker when clicking outside
+    document.addEventListener('click', (e) => {
+      const picker = document.getElementById('emojiPicker');
+      const emojiBtn = document.querySelector('[onclick="toggleEmojiPicker()"]');
+      if (!picker.contains(e.target) && e.target !== emojiBtn) {
+        picker.style.display = 'none';
+      }
+    });
+
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+  </script>
+</body>
+</html>
