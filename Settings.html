@@ -233,6 +233,14 @@
             font-size: 0.9rem;
         }
 
+        .settings-select {
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2rem;
@@ -425,6 +433,113 @@
             </div>
         </div>
 
+        <div class="demo-card" id="user-controls-card">
+            <h2><i class="fas fa-user-cog"></i> User Controls</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>Profile Visibility</h3>
+                    <p>Control who sees your profile and posts.</p>
+                    <select id="profile-visibility" class="settings-select" title="Profile Visibility">
+                        <option value="public">Public</option>
+                        <option value="friends">Friends</option>
+                        <option value="private">Private</option>
+                    </select>
+                </div>
+
+                <div class="feature-item">
+                    <h3>Notifications</h3>
+                    <p>Manage push and email notifications.</p>
+                    <div> style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+                        <label><input type="checkbox" id="notif-push"> Push Notifications</label>
+                        <label><input type="checkbox" id="notif-email"> Email Notifications</label>
+                        <label><input type="checkbox" id="notif-sound"> Sound</label>
+                        <label><input type="checkbox" id="notif-vibrate"> Vibration</label>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <h3>Privacy</h3>
+                    <p>Last seen & read receipts controls.</p>
+                    <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+                        <label><input type="checkbox" id="privacy-lastseen"> Show Last Seen</label>
+                        <label><input type="checkbox" id="privacy-read"> Read Receipts</label>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <h3>Themes</h3>
+                    <p>Choose your preferred theme.</p>
+                    <select id="theme-select" class="settings-select" title="Choose Theme">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="neon">Neon</option>
+                    </select>
+                </div>
+
+                <div class="feature-item" style="grid-column: 1 / -1;">
+                    <h3>Save Settings</h3>
+                    <p>Apply your preferences across the app.</p>
+                    <div style="margin-top:10px;">
+                        <button id="save-user-settings" class="back-button">Save Settings</button>
+                        <button id="load-user-settings" class="back-button" style="margin-left:10px;background:linear-gradient(45deg,#718096,#4a5568)">Reload</button>
+                    </div>
+                    <p id="settings-status" style="margin-top:8px;color:#4C51BF;font-weight:600;"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2><i class="fas fa-money-bill-wave"></i> Payout & Payment Settings</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>Choose Payout Method</h3>
+                    <p>Select how you'd like to receive payments.</p>
+                    <select id="payout-method" class="settings-select" title="Payout Method">
+                        <option value="bank">Bank Transfer</option>
+                        <option value="card">Bank Card</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="cashapp">Cash App</option>
+                        <option value="crypto">Crypto Wallet</option>
+                    </select>
+                </div>
+
+                <div class="feature-item">
+                    <h3>Payout Details</h3>
+                    <p>Enter account details for the selected payout method.</p>
+                    <div> style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+                        <input id="payout-address" placeholder="Account / Wallet ID" style="padding:8px;border-radius:8px;" />
+                        <input id="payout-details" placeholder="Additional details (JSON or note)" style="padding:8px;border-radius:8px;" />
+                        <label>Currency:
+                            <select id="payout-currency" class="settings-select" title="Payout Currency">
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="GBP">GBP</option>
+                                <option value="JPY">JPY</option>
+                                <option value="LOCAL">Local Currency</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="feature-item" style="grid-column:1 / -1;">
+                    <h3>How Earnings Are Earned</h3>
+                    <p>All tiers earn via a combination of:</p>
+                    <ul>
+                        <li>Ad revenue share (based on views & engagement)</li>
+                        <li>Tips and gifts from viewers</li>
+                        <li>Sponsor/brand deals (via Marketplace)</li>
+                        <li>Paid promotions and boosts</li>
+                    </ul>
+                    <p>Higher tiers receive larger revenue splits, priority payouts, and marketplace access.</p>
+                </div>
+
+                <div class="feature-item" style="grid-column: 1 / -1;">
+                    <button id="save-payout-settings" class="back-button">Save Payout Settings</button>
+                    <span id="payout-status" style="margin-left:12px;color:#4C51BF;font-weight:600;"></span>
+                </div>
+            </div>
+        </div>
+
         <div class="demo-card">
             <h2><i class="fas fa-code"></i> Technical Implementation</h2>
             <div class="tech-stack">
@@ -536,6 +651,358 @@
                     this.style.transform = 'translateY(0) scale(1)';
                 });
             });
+
+            // Pro Controls & Earnings Dashboard
+            (async function initProControls() {
+                const proCardHtml = `
+                <div class="demo-card" id="pro-card">
+                    <h2><i class="fas fa-gem"></i> Socialite Black Pro — Creator Dashboard</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item" style="grid-column: 1 / -1;">
+                            <h3>Earnings Overview</h3>
+                            <p id="earnings-summary">Loading earnings...</p>
+                            <div style="margin-top:10px;">
+                                <button id="withdraw-btn" class="back-button" style="background:linear-gradient(45deg,#f59e0b,#b45309)">Withdraw</button>
+                                <button id="refresh-earnings" class="back-button" style="margin-left:10px;background:linear-gradient(45deg,#48bb78,#2f855a)">Refresh</button>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <h3>Control Mode</h3>
+                            <p>Choose how your posts are managed: AI-assisted mode or Full User Control.</p>
+                            <div style="margin-top:12px;">
+                                <label style="display:flex;gap:10px;align-items:center;">
+                                    <input type="radio" name="control-mode" value="ai" id="mode-ai"> <span>AI Mode</span>
+                                </label>
+                                <label style="display:flex;gap:10px;align-items:center;margin-top:8px;">
+                                    <input type="radio" name="control-mode" value="user" id="mode-user"> <span>User Control Mode</span>
+                                </label>
+                                <p id="pro-hint" style="color:#6b7280;margin-top:8px;font-size:0.9rem;"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" id="user-control-panel" style="display:none;">
+                            <h3>User Control</h3>
+                            <p>Fine-grained options for distribution, monetization split, and boost settings.</p>
+                            <label>Monetization split (%) <input type="number" id="split-input" min="0" max="100" value="70" style="width:80px;margin-left:8px;"></label>
+                            <div style="margin-top:10px;">
+                                <button id="save-control-settings" class="back-button" style="background:linear-gradient(45deg,#4c51bf,#9f7aea)">Save Settings</button>
+                            </div>
+                        </div>
+                    </div>\n                </div>`;
+
+                const container = document.querySelector('.container');
+                container.insertAdjacentHTML('afterbegin', proCardHtml);
+
+                const earningsSummary = document.getElementById('earnings-summary');
+                const withdrawBtn = document.getElementById('withdraw-btn');
+                const refreshBtn = document.getElementById('refresh-earnings');
+                const proHint = document.getElementById('pro-hint');
+                const modeAI = document.getElementById('mode-ai');
+                const modeUser = document.getElementById('mode-user');
+                const userControlPanel = document.getElementById('user-control-panel');
+                const saveControlBtn = document.getElementById('save-control-settings');
+                const splitInput = document.getElementById('split-input');
+
+                async function isProUser() {
+                    if (!(firebase && firebase.auth && firebase.auth().currentUser)) return false;
+                    try {
+                        const idTokenResult = await firebase.auth().currentUser.getIdTokenResult();
+                        return Boolean(idTokenResult.claims && idTokenResult.claims.blackPro);
+                    } catch (e) { console.warn('claims check failed', e); return false; }
+                }
+
+                let lastEarningsData = { total:0, available:0, paid:0 };
+                async function fetchEarnings() {
+                    earningsSummary.textContent = 'Loading earnings...';
+                    const user = firebase && firebase.auth && firebase.auth().currentUser;
+                    if (!user) { earningsSummary.textContent = 'Sign in to view earnings.'; return; }
+                    try {
+                        const idToken = await user.getIdToken(true);
+                        const res = await fetch('/api/user/dashboard', { headers: { 'Authorization': 'Bearer ' + idToken } });
+                        if (!res.ok) throw new Error('no-data');
+                        const data = await res.json();
+                        lastEarningsData = data;
+                        earningsSummary.innerHTML = `<strong>Total earnings:</strong> $${(data.total || 0).toFixed(2)}<br><strong>Available:</strong> $${(data.available || 0).toFixed(2)}<br><strong>Paid:</strong> $${(data.paid || 0).toFixed(2)}`;
+                    } catch (e) {
+                        console.warn('fetchEarnings failed', e);
+                        lastEarningsData = { total:0, available:0, paid:0 };
+                        earningsSummary.innerHTML = `<strong>Total earnings:</strong> $0.00<br><strong>Available:</strong> $0.00<br><small>Connect your account or run backend dashboard API to show real earnings.</small>`;
+                    }
+                }
+
+                async function setupControlMode() {
+                    const pro = await isProUser();
+                    if (!pro) {
+                        proHint.textContent = 'Upgrade to Socialite Black Pro to enable switching control modes.';
+                        modeAI.disabled = true; modeUser.disabled = true;
+                        return;
+                    }
+                    proHint.textContent = '';
+                    modeAI.disabled = false; modeUser.disabled = false;
+                    // fetch current mode from backend if available
+                    try {
+                        const idToken = await firebase.auth().currentUser.getIdToken(true);
+                        const res = await fetch('/api/user/settings/control', { headers: { 'Authorization':'Bearer ' + idToken } });
+                        if (res.ok) {
+                            const json = await res.json();
+                            if (json.mode === 'user') { modeUser.checked = true; userControlPanel.style.display = 'block'; }
+                            else { modeAI.checked = true; userControlPanel.style.display = 'none'; }
+                        }
+                    } catch (e) { console.warn('could not load control mode', e); }
+                }
+
+                modeAI.addEventListener('change', () => { if (modeAI.checked) userControlPanel.style.display = 'none'; saveMode('ai'); });
+                modeUser.addEventListener('change', () => { if (modeUser.checked) userControlPanel.style.display = 'block'; saveMode('user'); });
+
+                async function saveMode(mode) {
+                    const user = firebase && firebase.auth && firebase.auth().currentUser;
+                    if (!user) return alert('Sign in to change mode');
+                    try {
+                        const idToken = await user.getIdToken(true);
+                        await fetch('/api/user/settings/control', { method:'POST', headers:{ 'Authorization':'Bearer '+idToken, 'Content-Type':'application/json' }, body: JSON.stringify({ mode }) });
+                    } catch (e) { console.warn('saveMode failed', e); }
+                }
+
+                saveControlBtn.addEventListener('click', async () => {
+                    const user = firebase && firebase.auth && firebase.auth().currentUser;
+                    if (!user) return alert('Sign in to save settings');
+                    const split = Number(splitInput.value) || 70;
+                    try {
+                        const idToken = await user.getIdToken(true);
+                        const res = await fetch('/api/user/settings/control', { method:'POST', headers:{ 'Authorization':'Bearer '+idToken, 'Content-Type':'application/json' }, body: JSON.stringify({ monetizationSplit: split }) });
+                        if (res.ok) alert('Settings saved'); else alert('Failed to save settings');
+                    } catch (e) { console.error(e); alert('Error saving settings'); }
+                });
+
+                refreshBtn.addEventListener('click', fetchEarnings);
+                                // Withdraw flow with amount, method, fee and ETA
+                                withdrawBtn.addEventListener('click', async () => {
+                                    const user = firebase && firebase.auth && firebase.auth().currentUser;
+
+                                    // Build modal if not present
+                                        if (!document.getElementById('withdraw-modal')) {
+                                                const modalHtml = `
+                                                <div id="withdraw-modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:3000;">
+                                                    <div style="background:#fff;border-radius:12px;padding:18px;max-width:420px;width:92%;color:#111;">
+                                                        <h3 style="margin-top:0">Request Withdrawal</h3>
+                                                        <label>Amount (USD): <input id="withdraw-amount" type="number" min="0" step="0.01" style="width:120px;margin-left:8px;"></label>
+                                                        <div style="margin-top:8px;">
+                                                            <label>Method: 
+                                                                <select id="withdraw-method">
+                                                                    <option value="bank">Bank Transfer (15% fee, 24h)</option>
+                                                                    <option value="paypal">PayPal (10% fee, 48h)</option>
+                                                                    <option value="cashapp">Cash App / Other (12% fee, 48h)</option>
+                                                                    <option value="crypto">Crypto (5% fee, 12h)</option>
+                                                                </select>
+                                                            </label>
+                                                        </div>
+                                                        <div style="margin-top:8px;">Destination (account / address):<br><input id="withdraw-address" type="text" style="width:100%;"></div>
+                                                        <div id="withdraw-summary" style="margin-top:10px;color:#374151;font-size:0.95rem;"></div>
+                                                        <div style="margin-top:12px;text-align:right;">
+                                                            <button id="withdraw-cancel" style="margin-right:8px;background:#e5e7eb;border-radius:8px;padding:8px 12px;border:none;">Cancel</button>
+                                                            <button id="withdraw-confirm" style="background:linear-gradient(45deg,#f59e0b,#b45309);color:#fff;border:none;border-radius:8px;padding:8px 12px;">Withdraw</button>
+                                                        </div>
+                                                    </div>
+                                                </div>`;
+                                                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                                                document.getElementById('withdraw-cancel').onclick = () => { document.getElementById('withdraw-modal').remove(); };
+                                            }
+
+                                        // Prefill values
+                                        const amountInput = document.getElementById('withdraw-amount');
+                                        const methodSelect = document.getElementById('withdraw-method');
+                                        const addressInput = document.getElementById('withdraw-address');
+                                        const summary = document.getElementById('withdraw-summary');
+                                        const confirmBtn = document.getElementById('withdraw-confirm');
+
+                                        // Prefill available amount
+                                        const available = (lastEarningsData && lastEarningsData.available) ? Number(lastEarningsData.available) : 0;
+                                        amountInput.value = available.toFixed(2);
+
+                                        // Try to prefill address from payout settings if signed in
+                                        if (user) {
+                                            try {
+                                                const idToken = await user.getIdToken(true);
+                                                const prefs = await fetch('/api/user/payout/settings', { headers: { 'Authorization': 'Bearer ' + idToken } });
+                                                if (prefs.ok) {
+                                                    const j = await prefs.json();
+                                                    const p = j.payouts || {};
+                                                    if (p.payoutAddress) addressInput.value = p.payoutAddress;
+                                                    if (p.payoutMethod) methodSelect.value = p.payoutMethod;
+                                                }
+                                            } catch (e) { /* ignore */ }
+                                        }
+
+                                        function computeSummary() {
+                                                const amt = Math.max(0, Number(amountInput.value) || 0);
+                                                const m = methodSelect.value;
+                                                const rules = { bank:{pct:0.15,h:24}, paypal:{pct:0.10,h:48}, cashapp:{pct:0.12,h:48}, crypto:{pct:0.05,h:12} };
+                                                const r = rules[m] || rules.cashapp;
+                                                const fee = Math.round((amt * r.pct + Number.EPSILON) * 100) / 100;
+                                                const net = Math.round((amt - fee + Number.EPSILON) * 100) / 100;
+                                                const etaHours = r.h;
+                                                summary.innerHTML = `<strong>Fee:</strong> $${fee.toFixed(2)} (${(r.pct*100).toFixed(0)}%)<br><strong>Net:</strong> $${net.toFixed(2)}<br><strong>Arrival:</strong> ~${etaHours} hours`;
+                                                return { amt, method: m, fee, net };
+                                        }
+
+                                        amountInput.oninput = computeSummary;
+                                        methodSelect.onchange = computeSummary;
+                                        computeSummary();
+
+                                        confirmBtn.onclick = async () => {
+                                                const user = firebase && firebase.auth && firebase.auth().currentUser;
+                                                if (!user) return alert('Sign in to withdraw');
+                                                const idToken = await user.getIdToken(true);
+                                                const { amt, method } = computeSummary();
+                                                if (amt <= 0) return alert('Enter an amount to withdraw');
+                                                if (amt > (lastEarningsData.available || 0)) return alert('Amount exceeds available balance');
+                                                const address = addressInput.value || '';
+                                                try {
+                                                        const res = await fetch('/api/user/withdraw', { method:'POST', headers:{ 'Authorization':'Bearer '+idToken, 'Content-Type':'application/json' }, body: JSON.stringify({ amount: amt, method, address }) });
+                                                        if (res.ok) {
+                                                                const j = await res.json();
+                                                                alert('Withdrawal requested. Net: $' + (j.payout.netAmount || 0).toFixed(2) + '. Arrival approx: ' + new Date(j.payout.eta).toLocaleString());
+                                                                document.getElementById('withdraw-modal').remove();
+                                                                fetchEarnings();
+                                                        } else {
+                                                                const t = await res.json().catch(()=>({}));
+                                                                alert('Withdrawal failed: ' + (t.error || res.statusText));
+                                                        }
+                                                } catch (e) {
+                                                        console.error(e);
+                                                        alert('Withdrawal error');
+                                                }
+                                        };
+                                });
+
+                // initial load
+                fetchEarnings();
+                setupControlMode();
+            })();
+
+            // User settings: load/save (visibility, notifications, themes, privacy)
+            async function getIdTokenIfAvailable() {
+                try {
+                    if (firebase && firebase.auth && firebase.auth().currentUser) {
+                        return await firebase.auth().currentUser.getIdToken(true);
+                    }
+                } catch (e) { console.warn('getIdTokenIfAvailable', e); }
+                return null;
+            }
+
+            async function loadUserSettings() {
+                const status = document.getElementById('settings-status');
+                status.textContent = 'Loading...';
+                try {
+                    const token = await getIdTokenIfAvailable();
+                    const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+                    const res = await fetch('/api/settings', { headers });
+                    if (!res.ok) throw new Error('failed');
+                    const json = await res.json();
+                    const s = (json && json.settings) || {};
+                    document.getElementById('profile-visibility').value = s.privacy?.profileVisibility || 'friends';
+                    document.getElementById('notif-push').checked = s.notifications?.pushNotifications ?? true;
+                    document.getElementById('notif-email').checked = s.notifications?.emailNotifications ?? false;
+                    document.getElementById('notif-sound').checked = s.notifications?.soundEnabled ?? true;
+                    document.getElementById('notif-vibrate').checked = s.notifications?.vibrationEnabled ?? true;
+                    document.getElementById('privacy-lastseen').checked = s.privacy?.lastSeen ?? true;
+                    document.getElementById('privacy-read').checked = s.privacy?.readReceipts ?? true;
+                    document.getElementById('theme-select').value = s.themes?.currentTheme || 'neon';
+                    status.textContent = 'Settings loaded.';
+                } catch (e) {
+                    console.warn('loadUserSettings failed', e);
+                    status.textContent = 'Using default settings (not signed in or server error).';
+                }
+            }
+
+            async function saveUserSettings() {
+                const status = document.getElementById('settings-status');
+                status.textContent = 'Saving...';
+                const payload = {
+                    settings: {
+                        privacy: {
+                            profileVisibility: document.getElementById('profile-visibility').value,
+                            lastSeen: document.getElementById('privacy-lastseen').checked,
+                            readReceipts: document.getElementById('privacy-read').checked
+                        },
+                        notifications: {
+                            pushNotifications: document.getElementById('notif-push').checked,
+                            emailNotifications: document.getElementById('notif-email').checked,
+                            soundEnabled: document.getElementById('notif-sound').checked,
+                            vibrationEnabled: document.getElementById('notif-vibrate').checked
+                        },
+                        themes: {
+                            currentTheme: document.getElementById('theme-select').value
+                        }
+                    }
+                };
+
+                try {
+                    const token = await getIdTokenIfAvailable();
+                    const headers = Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': 'Bearer ' + token } : {});
+                    const res = await fetch('/api/settings', { method: 'POST', headers, body: JSON.stringify(payload) });
+                    if (!res.ok) throw new Error('save-failed');
+                    status.textContent = 'Settings saved.';
+                } catch (e) {
+                    console.error('saveUserSettings failed', e);
+                    status.textContent = 'Failed to save settings.';
+                }
+            }
+
+            const _saveUserBtn = document.getElementById('save-user-settings');
+            if (_saveUserBtn) _saveUserBtn.addEventListener('click', saveUserSettings);
+            const _loadUserBtn = document.getElementById('load-user-settings');
+            if (_loadUserBtn) _loadUserBtn.addEventListener('click', loadUserSettings);
+
+            // Initial load for user settings
+            loadUserSettings();
+
+            // Payout settings load / save
+            async function loadPayoutSettings() {
+                const status = document.getElementById('payout-status');
+                status.textContent = 'Loading...';
+                try {
+                    const token = await getIdTokenIfAvailable();
+                    const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+                    const res = await fetch('/api/user/payout/settings', { headers });
+                    if (!res.ok) throw new Error('no-data');
+                    const json = await res.json();
+                    const p = json.payouts || {};
+                    document.getElementById('payout-method').value = p.payoutMethod || p.method || 'bank';
+                    document.getElementById('payout-address').value = p.payoutAddress || p.address || '';
+                    document.getElementById('payout-details').value = (p.payoutDetails && JSON.stringify(p.payoutDetails)) || (p.details && JSON.stringify(p.details)) || '';
+                    document.getElementById('payout-currency').value = p.payoutCurrency || p.currency || 'USD';
+                    status.textContent = '';
+                } catch (e) {
+                    console.warn('loadPayoutSettings failed', e);
+                    status.textContent = 'Using default payout settings.';
+                }
+            }
+
+            async function savePayoutSettings() {
+                const status = document.getElementById('payout-status');
+                status.textContent = 'Saving...';
+                const method = document.getElementById('payout-method').value;
+                const address = document.getElementById('payout-address').value;
+                let detailsRaw = document.getElementById('payout-details').value || '';
+                let details = detailsRaw;
+                try { details = JSON.parse(detailsRaw); } catch (e) { details = detailsRaw; }
+                const currency = document.getElementById('payout-currency').value || 'USD';
+                try {
+                    const token = await getIdTokenIfAvailable();
+                    const headers = Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': 'Bearer ' + token } : {});
+                    const res = await fetch('/api/user/payout/settings', { method: 'POST', headers, body: JSON.stringify({ payoutMethod: method, payoutAddress: address, payoutDetails: details, currency }) });
+                    if (!res.ok) throw new Error('save-failed');
+                    status.textContent = 'Payout settings saved.';
+                } catch (e) {
+                    console.error('savePayoutSettings failed', e);
+                    status.textContent = 'Failed to save payout settings.';
+                }
+            }
+
+            const _savePayoutBtn = document.getElementById('save-payout-settings');
+            if (_savePayoutBtn) _savePayoutBtn.addEventListener('click', savePayoutSettings);
+            // initial payout load
+            loadPayoutSettings();
 
             console.log('⚙️ Advanced Settings Dashboard demo loaded successfully!');
             console.log('🤖 Features: AI Privacy Coach, Voice Control, Accessibility Suite, Theme Switching');
