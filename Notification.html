@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Socialite - Elevate your vibe with luxury notifications and viral updates. 💎✨ #SocialiteGlowUp" />
+  <title>Socialite - Notifications</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" onerror="this.href='';document.body.style.fontFamily='sans-serif';">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" onerror="this.href='';">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center;
+      background: linear-gradient(135deg, #4C51BF, #ED64A6, #9F7AEA); overflow: hidden;
+    }
+    .container { text-align: center; color: #FFF; width: 90%; padding: 5vw; }
+    h1 { font-size: 8vw; font-size: 2.5rem; text-shadow: 0 0 20px rgba(255, 255, 255, 0.6); animation: pulse 2s infinite ease-in-out; }
+    p { font-size: 5vw; font-size: 1.2rem; color: rgba(255, 255, 255, 0.9); margin-top: 3vh; }
+    .notification-icon {
+      font-size: 18vw; font-size: 90px; color: #ED64A6; text-shadow: 0 0 25px rgba(237, 100, 166, 0.9); margin-bottom: 4vh;
+      animation: bounce 1.5s ease-in-out infinite;
+    }
+    .loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #FFF; font-size: 5vw; display: none; animation: blink 1s infinite; }
+    @media (max-width: 480px) {
+      h1 { font-size: 9vw; }
+      p { font-size: 5.5vw; }
+      .notification-icon { font-size: 20vw; }
+    }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    @keyframes blink { 50% { opacity: 0.5; } }
+    body.dark-mode { background: linear-gradient(135deg, #2D3748, #4A5568, #718096); }
+    body.dark-mode .container { background: rgba(45, 55, 72, 0.2); }
+    body.dark-mode h1, body.dark-mode p { color: #DDD; }
+  </style>
+</head>
+<body>
+  <div class="container" role="region" aria-label="Notifications">
+    <i class="fas fa-bell notification-icon" aria-hidden="true"></i>
+    <h1>Notifications</h1>
+    <p>Stay tuned for exciting updates coming soon!</p>
+  </div>
+  <div class="loading" id="loading">Loading...</div>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" async></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" async></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js" async></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDdfcTtRD-HdvB_n_colrUWQI-FUZAiNh0",
+      authDomain: "socialite-bae96.firebaseapp.com",
+      projectId: "socialite-bae96",
+      storageBucket: "socialite-bae96.firebasestorage.app",
+      messagingSenderId: "871563265567",
+      appId: "1:871563265567:web:60b88ac1688f8af3ae372a",
+      measurementId: "G-5LN8406TPX"
+    };
+
+    let app, auth, analytics;
+    document.getElementById('loading').style.display = 'block';
+    setTimeout(() => {
+      try {
+        if (!window.firebaseApp) {
+          app = firebase.initializeApp(firebaseConfig);
+          auth = firebase.auth();
+          analytics = firebase.analytics(app);
+          window.firebaseApp = app;
+        } else {
+          app = window.firebaseApp;
+          auth = firebase.auth();
+          analytics = firebase.analytics(app);
+        }
+        document.getElementById('loading').style.display = 'none';
+        auth.onAuthStateChanged((user) => {
+          if (!user) window.location.replace('login.html');
+        });
+      } catch (e) {
+        console.error("Firebase initialization failed:", e);
+        document.getElementById('loading').textContent = 'Retry in progress...';
+        setTimeout(() => location.reload(), 2000);
+      }
+    }, 5000);
+
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+  </script>
+</body>
+</html>

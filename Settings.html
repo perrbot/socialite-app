@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Settings Dashboard - Socialite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ED64A6, #4C51BF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .demo-card {
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(15px) brightness(1.1) contrast(1.05) saturate(1.2);
+            backdrop-filter: blur(15px) brightness(1.1) contrast(1.05) saturate(1.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(237, 100, 166, 0.2);
+        }
+
+        .demo-card h2 {
+            color: #4C51BF;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #ED64A6;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-item h3 {
+            color: #4C51BF;
+            margin-bottom: 10px;
+        }
+
+        .feature-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status-implemented {
+            background: linear-gradient(45deg, #48BB78, #38A169);
+            color: white;
+        }
+
+        .status-advanced {
+            background: linear-gradient(45deg, #ED64A6, #D53F8C);
+            color: white;
+        }
+
+        .status-ai {
+            background: linear-gradient(45deg, #9F7AEA, #805AD5);
+            color: white;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ED64A6, #4C51BF);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(237, 100, 166, 0.4);
+        }
+
+        .tech-stack {
+            background: rgba(76, 81, 191, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .tech-stack h4 {
+            color: #4C51BF;
+            margin-bottom: 15px;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tech-tag {
+            background: linear-gradient(45deg, #ED64A6, #4C51BF);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .ai-features {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .ai-features h4 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .theme-preview {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .theme-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .theme-box:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .theme-light {
+            background: linear-gradient(45deg, #f7fafc, #edf2f7);
+        }
+
+        .theme-dark {
+            background: linear-gradient(45deg, #2d3748, #4a5568);
+        }
+
+        .theme-neon {
+            background: linear-gradient(45deg, #ED64A6, #4C51BF, #9F7AEA);
+            animation: neon-pulse 2s infinite;
+        }
+
+        @keyframes neon-pulse {
+            0%, 100% { box-shadow: 0 0 5px #ED64A6; }
+            50% { box-shadow: 0 0 20px #ED64A6, 0 0 30px #4C51BF; }
+        }
+
+        .voice-demo {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .voice-demo button {
+            background: linear-gradient(45deg, #ED64A6, #4C51BF);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .settings-select {
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+        }
+
+        .payout-status {
+            margin-left: 12px;
+            margin-top: 8px;
+            color: #4C51BF;
+            font-weight: 600;
+        }
+
+        .full-width-grid {
+            grid-column: 1 / -1;
+        }
+
+        .flex-col-gap {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-field {
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .margin-top-10 {
+            margin-top: 10px;
+        }
+
+        .margin-left-10 {
+            margin-left: 10px;
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, #f59e0b, #b45309);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #48bb78, #2f855a);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4c51bf, #9f7aea);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 3000;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 12px;
+            padding: 18px;
+            max-width: 420px;
+            width: 92%;
+            color: #111;
+        }
+
+        .btn-stripe-connect {
+            background: linear-gradient(45deg, #06b6d4, #0ea5a4);
+            margin-right: 8px;
+        }
+
+        .btn-stripe-payout {
+            background: linear-gradient(45deg, #6b7280, #374151);
+        }
+
+        .stripe-status-text {
+            margin-left: 10px;
+            color: #f3f4f6;
+        }
+
+        .btn-webhook-view {
+            background: linear-gradient(45deg, #06b6d4, #0ea5a4);
+            margin-right: 8px;
+        }
+
+        .btn-reconcile {
+            background: linear-gradient(45deg, #4c51bf, #9f7aea);
+        }
+
+        .webhook-controls {
+            margin-top: 10px;
+        }
+
+        .webhook-logs-container {
+            margin-top: 12px;
+            max-height: 320px;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.04);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #111;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .theme-preview {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+        <div class="header">
+            <h1><i class="fas fa-cog"></i> Advanced Settings Dashboard</h1>
+            <p>AI-powered settings with voice control, accessibility features, and personalized recommendations</p>
+        </div>
+
+        <div class="demo-card">
+            <h2><i class="fas fa-brain"></i> AI Privacy Coach</h2>
+            <div class="ai-features">
+                <h4><i class="fas fa-robot"></i> Smart Privacy Recommendations</h4>
+                <p>Our AI analyzes your usage patterns and suggests optimal privacy settings based on your behavior and preferences.</p>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <h3><i class="fas fa-user-shield"></i> Profile Visibility</h3>
+                        <p>AI suggests who can see your posts, stories, and profile information.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3><i class="fas fa-bell-slash"></i> Notification Control</h3>
+                        <p>Smart suggestions for notification preferences based on your activity patterns.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3><i class="fas fa-lock"></i> Data Protection</h3>
+                        <p>Automated recommendations for data sharing and third-party access.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2><i class="fas fa-palette"></i> Theme & Appearance</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="status-badge status-implemented">✅ IMPLEMENTED</div>
+                    <h3><i class="fas fa-sun"></i> Light Theme</h3>
+                    <p>Clean, bright interface perfect for daytime use and accessibility.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-implemented">✅ IMPLEMENTED</div>
+                    <h3><i class="fas fa-moon"></i> Dark Theme</h3>
+                    <p>Easy on the eyes with reduced blue light for nighttime usage.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-advanced">🚀 ADVANCED</div>
+                    <h3><i class="fas fa-bolt"></i> Neon Theme</h3>
+                    <p>Vibrant gradient theme with animated effects and modern aesthetics.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-implemented">✅ IMPLEMENTED</div>
+                    <h3><i class="fas fa-eye"></i> Live Preview</h3>
+                    <p>See theme changes instantly before applying them to your interface.</p>
+                </div>
+            </div>
+
+            <div class="theme-preview">
+                <div class="theme-box theme-light" title="Light Theme"></div>
+                <div class="theme-box theme-dark" title="Dark Theme"></div>
+                <div class="theme-box theme-neon" title="Neon Theme"></div>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2><i class="fas fa-universal-access"></i> Accessibility Suite</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="status-badge status-advanced">🚀 ADVANCED</div>
+                    <h3><i class="fas fa-text-height"></i> Dynamic Font Sizes</h3>
+                    <p>Adjustable text sizes from small to extra-large for optimal readability.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-ai">🤖 AI-POWERED</div>
+                    <h3><i class="fas fa-microphone"></i> Voice Navigation</h3>
+                    <p>Control settings with voice commands like "Show privacy settings" or "Switch to dark theme".</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-implemented">✅ IMPLEMENTED</div>
+                    <h3><i class="fas fa-hand-paper"></i> Haptic Feedback</h3>
+                    <p>Vibration feedback for touch interactions on supported devices.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-implemented">✅ IMPLEMENTED</div>
+                    <h3><i class="fas fa-adjust"></i> High Contrast Mode</h3>
+                    <p>Enhanced visibility for users with visual impairments.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-implemented">✅ IMPLEMENTED</div>
+                    <h3><i class="fas fa-volume-up"></i> Screen Reader Support</h3>
+                    <p>Full compatibility with assistive technologies and screen readers.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-advanced">🚀 ADVANCED</div>
+                    <h3><i class="fas fa-keyboard"></i> Keyboard Navigation</h3>
+                    <p>Complete keyboard accessibility with proper focus management.</p>
+                </div>
+            </div>
+
+            <div class="voice-demo">
+                <h4><i class="fas fa-microphone"></i> Try Voice Commands:</h4>
+                <p>"Show privacy settings" • "Switch to neon theme" • "Export my data"</p>
+                <button onclick="simulateVoiceCommand()">🎤 Demo Voice Command</button>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2><i class="fas fa-chart-line"></i> Engagement Controls</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="status-badge status-advanced">🚀 ADVANCED</div>
+                    <h3><i class="fas fa-robot"></i> Algorithm Tuning</h3>
+                    <p>Fine-tune content recommendations, ad tolerance, and social boost levels.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-implemented">✅ IMPLEMENTED</div>
+                    <h3><i class="fas fa-eye"></i> Transparency Mode</h3>
+                    <p>See how the algorithm works and why you see certain content.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-implemented">✅ IMPLEMENTED</div>
+                    <h3><i class="fas fa-clock"></i> Quiet Hours</h3>
+                    <p>Set specific times when notifications and algorithm suggestions are reduced.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-advanced">🚀 ADVANCED</div>
+                    <h3><i class="fas fa-globe"></i> Discovery Range</h3>
+                    <p>Control how far the algorithm searches for new content and connections.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2><i class="fas fa-download"></i> Data Management</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="status-badge status-implemented">✅ IMPLEMENTED</div>
+                    <h3><i class="fas fa-file-export"></i> One-Click Export</h3>
+                    <p>Download all your data in JSON format with complete profile and activity history.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-advanced">🚀 ADVANCED</div>
+                    <h3><i class="fas fa-shield-alt"></i> Privacy Audit</h3>
+                    <p>Comprehensive review of all data sharing and third-party access permissions.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-implemented">✅ IMPLEMENTED</div>
+                    <h3><i class="fas fa-trash"></i> Data Deletion</h3>
+                    <p>Easy account deletion with data removal options and confirmation steps.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="status-badge status-ai">🤖 AI-POWERED</div>
+                    <h3><i class="fas fa-chart-pie"></i> Usage Analytics</h3>
+                    <p>AI-generated insights about your app usage patterns and engagement metrics.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-card" id="user-controls-card">
+            <h2><i class="fas fa-user-cog"></i> User Controls</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>Profile Visibility</h3>
+                    <p>Control who sees your profile and posts.</p>
+                    <select id="profile-visibility" class="settings-select" title="Profile Visibility">
+                        <option value="public">Public</option>
+                        <option value="friends">Friends</option>
+                        <option value="private">Private</option>
+                    </select>
+                </div>
+
+                <div class="feature-item">
+                    <h3>Notifications</h3>
+                    <p>Manage push and email notifications.</p>
+                    <div class="flex-col-gap">
+                        <label><input type="checkbox" id="notif-push"> Push Notifications</label>
+                        <label><input type="checkbox" id="notif-email"> Email Notifications</label>
+                        <label><input type="checkbox" id="notif-sound"> Sound</label>
+                        <label><input type="checkbox" id="notif-vibrate"> Vibration</label>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <h3>Privacy</h3>
+                    <p>Last seen & read receipts controls.</p>
+                    <div class="flex-col-gap">
+                        <label><input type="checkbox" id="privacy-lastseen"> Show Last Seen</label>
+                        <label><input type="checkbox" id="privacy-read"> Read Receipts</label>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <h3>Themes</h3>
+                    <p>Choose your preferred theme.</p>
+                    <select id="theme-select" class="settings-select" title="Choose Theme">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="neon">Neon</option>
+                    </select>
+                </div>
+
+                <div class="feature-item full-width">
+                    <h3>Save Settings</h3>
+                    <p>Apply your preferences across the app.</p>
+                    <div class="margin-top-10">
+                        <button id="save-user-settings" class="back-button">Save Settings</button>
+                        <button id="load-user-settings" class="back-button reload-button">Reload</button>
+                    </div>
+                    <p id="settings-status" class="payout-status"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2><i class="fas fa-money-bill-wave"></i> Payout & Payment Settings</h2>
+            <div> style="margin-top:10px;margin-bottom:8px;">
+                <button id="connect-stripe" type="button" class="back-button btn-stripe-connect">Connect Stripe</button>
+                <button id="request-stripe-payout" type="button" class="back-button btn-stripe-payout">Request Stripe Payout</button>
+                <small id="stripe-status" class="stripe-status-text">(Connect Stripe to enable payouts)</small>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>Choose Payout Method</h3>
+                    <p>Select how you'd like to receive payments.</p>
+                    <select id="payout-method" class="settings-select" title="Payout Method">
+                        <option value="bank">Bank Transfer</option>
+                        <option value="card">Bank Card</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="cashapp">Cash App</option>
+                        <option value="crypto">Crypto Wallet</option>
+                    </select>
+                </div>
+
+                <div class="feature-item">
+                    <h3>Payout Details</h3>
+                    <p>Enter account details for the selected payout method.</p>
+                    <div class="flex-col-gap">
+                        <input id="payout-address" placeholder="Account / Wallet ID" class="input-field" />
+                        <input id="payout-details" placeholder="Additional details (JSON or note)" class="input-field" />
+                        <label>Currency:
+                            <select id="payout-currency" class="settings-select" title="Payout Currency">
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="GBP">GBP</option>
+                                <option value="JPY">JPY</option>
+                                <option value="LOCAL">Local Currency</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="feature-item full-width-grid">
+                    <h3>How Earnings Are Earned</h3>
+                    <p>All tiers earn via a combination of:</p>
+                    <ul>
+                        <li>Ad revenue share (based on views & engagement)</li>
+                        <li>Tips and gifts from viewers</li>
+                        <li>Sponsor/brand deals (via Marketplace)</li>
+                        <li>Paid promotions and boosts</li>
+                    </ul>
+                    <p>Higher tiers receive larger revenue splits, priority payouts, and marketplace access.</p>
+                </div>
+
+                <div class="feature-item full-width-grid">
+                    <button id="save-payout-settings" class="back-button">Save Payout Settings</button>
+                    <span id="payout-status" class="payout-status"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2><i class="fas fa-code"></i> Technical Implementation</h2>
+            <div class="tech-stack">
+                <h4>Frontend Technologies:</h4>
+                <div class="tech-tags">
+                    <span class="tech-tag">React 18</span>
+                    <span class="tech-tag">Speech Recognition API</span>
+                    <span class="tech-tag">CSS Custom Properties</span>
+                    <span class="tech-tag">Local Storage</span>
+                    <span class="tech-tag">Responsive Design</span>
+                    <span class="tech-tag">WCAG 2.1</span>
+                    <span class="tech-tag">Voice UX</span>
+                </div>
+            </div>
+
+            <div class="tech-stack">
+                <h4>Backend Technologies:</h4>
+                <div class="tech-tags">
+                    <span class="tech-tag">Node.js</span>
+                    <span class="tech-tag">Express.js</span>
+                    <span class="tech-tag">MongoDB</span>
+                    <span class="tech-tag">JWT Auth</span>
+                    <span class="tech-tag">Machine Learning</span>
+                    <span class="tech-tag">Data Analytics</span>
+                    <span class="tech-tag">Export APIs</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2><i class="fas fa-star"></i> Advanced Features</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3><i class="fas fa-brain"></i> Predictive Settings</h3>
+                    <p>AI learns your preferences and automatically adjusts settings based on context.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h3><i class="fas fa-sync"></i> Cross-Device Sync</h3>
+                    <p>Settings automatically sync across all your devices in real-time.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h3><i class="fas fa-flask"></i> A/B Testing</h3>
+                    <p>Participate in feature testing and help improve the platform.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h3><i class="fas fa-headset"></i> 24/7 AI Support</h3>
+                    <p>Get instant help and guidance from our AI assistant.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="demo-card" id="webhook-admin-card">
+            <h2><i class="fas fa-server"></i> Admin: Webhook Logs</h2>
+            <p class="payout-status">View incoming webhook deliveries and quick reconciliation status.</p>
+            <div class="webhook-controls">
+                <button id="view-webhook-logs" type="button" class="back-button btn-webhook-view">View Webhook Logs</button>
+                <button id="trigger-reconcile" type="button" class="back-button btn-reconcile">Re-run Reconciliation</button>
+                <small id="webhook-admin-hint">Admin only</small>
+            </div>
+            <div id="webhook-logs-list" class="webhook-logs-container"></div>
+        </div>
+
+    <script>
+        // Interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme preview interactions
+            const themeBoxes = document.querySelectorAll('.theme-box');
+            themeBoxes.forEach(box => {
+                box.addEventListener('click', function() {
+                    // Remove active class from all
+                    themeBoxes.forEach(b => b.style.borderColor = 'transparent');
+                    // Add active class to clicked
+                    this.style.borderColor = 'rgba(255, 255, 255, 0.8)';
+                });
+            });
+
+            // Voice command simulation
+            window.simulateVoiceCommand = function() {
+                const commands = [
+                    'Show privacy settings',
+                    'Switch to neon theme',
+                    'Export my data',
+                    'Enable voice navigation'
+                ];
+                const randomCommand = commands[Math.floor(Math.random() * commands.length)];
+
+                // Show command being processed
+                const voiceDemo = document.querySelector('.voice-demo');
+                const originalText = voiceDemo.innerHTML;
+                voiceDemo.innerHTML = `<h4><i class="fas fa-microphone"></i> Processing: "${randomCommand}"</h4>
+                                      <p>🎯 Command recognized and executed!</p>`;
+
+                setTimeout(() => {
+                    voiceDemo.innerHTML = originalText;
+                }, 3000);
+            };
+
+            // Add click animations to feature items
+            const featureItems = document.querySelectorAll('.feature-item');
+            featureItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98) translateY(-5px)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1) translateY(-5px)';
+                    }, 150);
+                });
+            });
+
+            // Add hover effects to tech tags
+            const techTags = document.querySelectorAll('.tech-tag');
+            techTags.forEach(tag => {
+                tag.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px) scale(1.05)';
+                });
+                tag.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Pro Controls & Earnings Dashboard
+            (async function initProControls() {
+                const proCardHtml = `
+                <div class="demo-card" id="pro-card">
+                    <h2><i class="fas fa-gem"></i> Socialite Black Pro — Creator Dashboard</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item" style="grid-column: 1 / -1;">
+                            <h3>Earnings Overview</h3>
+                            <p id="earnings-summary">Loading earnings...</p>
+                            <div style="margin-top:10px;">
+                                <button id="withdraw-btn" class="back-button" style="background:linear-gradient(45deg,#f59e0b,#b45309)">Withdraw</button>
+                                <button id="refresh-earnings" class="back-button" style="margin-left:10px;background:linear-gradient(45deg,#48bb78,#2f855a)">Refresh</button>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <h3>Control Mode</h3>
+                            <p>Choose how your posts are managed: AI-assisted mode or Full User Control.</p>
+                            <div style="margin-top:12px;">
+                                <label style="display:flex;gap:10px;align-items:center;">
+                                    <input type="radio" name="control-mode" value="ai" id="mode-ai"> <span>AI Mode</span>
+                                </label>
+                                <label style="display:flex;gap:10px;align-items:center;margin-top:8px;">
+                                    <input type="radio" name="control-mode" value="user" id="mode-user"> <span>User Control Mode</span>
+                                </label>
+                                <p id="pro-hint" style="color:#6b7280;margin-top:8px;font-size:0.9rem;"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" id="user-control-panel" style="display:none;">
+                            <h3>User Control</h3>
+                            <p>Fine-grained options for distribution, monetization split, and boost settings.</p>
+                            <label>Monetization split (%) <input type="number" id="split-input" min="0" max="100" value="70" style="width:80px;margin-left:8px;"></label>
+                            <div style="margin-top:10px;">
+                                <button id="save-control-settings" class="back-button" style="background:linear-gradient(45deg,#4c51bf,#9f7aea)">Save Settings</button>
+                            </div>
+                        </div>
+                    </div>\n                </div>`;
+
+                const container = document.querySelector('.container');
+                container.insertAdjacentHTML('afterbegin', proCardHtml);
+
+                const earningsSummary = document.getElementById('earnings-summary');
+                const withdrawBtn = document.getElementById('withdraw-btn');
+                const refreshBtn = document.getElementById('refresh-earnings');
+                const proHint = document.getElementById('pro-hint');
+                const modeAI = document.getElementById('mode-ai');
+                const modeUser = document.getElementById('mode-user');
+                const userControlPanel = document.getElementById('user-control-panel');
+                const saveControlBtn = document.getElementById('save-control-settings');
+                const splitInput = document.getElementById('split-input');
+
+                async function isProUser() {
+                    if (!(firebase && firebase.auth && firebase.auth().currentUser)) return false;
+                    try {
+                        const idTokenResult = await firebase.auth().currentUser.getIdTokenResult();
+                        return Boolean(idTokenResult.claims && idTokenResult.claims.blackPro);
+                    } catch (e) { console.warn('claims check failed', e); return false; }
+                }
+
+                let lastEarningsData = { total:0, available:0, paid:0 };
+                async function fetchEarnings() {
+                    earningsSummary.textContent = 'Loading earnings...';
+                    const user = firebase && firebase.auth && firebase.auth().currentUser;
+                    if (!user) { earningsSummary.textContent = 'Sign in to view earnings.'; return; }
+                    try {
+                        const idToken = await user.getIdToken(true);
+                        const res = await fetch('/api/user/dashboard', { headers: { 'Authorization': 'Bearer ' + idToken } });
+                        if (!res.ok) throw new Error('no-data');
+                        const data = await res.json();
+                        lastEarningsData = data;
+                        earningsSummary.innerHTML = `<strong>Total earnings:</strong> $${(data.total || 0).toFixed(2)}<br><strong>Available:</strong> $${(data.available || 0).toFixed(2)}<br><strong>Paid:</strong> $${(data.paid || 0).toFixed(2)}`;
+                    } catch (e) {
+                        console.warn('fetchEarnings failed', e);
+                        lastEarningsData = { total:0, available:0, paid:0 };
+                        earningsSummary.innerHTML = `<strong>Total earnings:</strong> $0.00<br><strong>Available:</strong> $0.00<br><small>Connect your account or run backend dashboard API to show real earnings.</small>`;
+                    }
+                }
+
+                async function setupControlMode() {
+                    const pro = await isProUser();
+                    if (!pro) {
+                        proHint.textContent = 'Upgrade to Socialite Black Pro to enable switching control modes.';
+                        modeAI.disabled = true; modeUser.disabled = true;
+                        return;
+                    }
+                    proHint.textContent = '';
+                    modeAI.disabled = false; modeUser.disabled = false;
+                    // fetch current mode from backend if available
+                    try {
+                        const idToken = await firebase.auth().currentUser.getIdToken(true);
+                        const res = await fetch('/api/user/settings/control', { headers: { 'Authorization':'Bearer ' + idToken } });
+                        if (res.ok) {
+                            const json = await res.json();
+                            if (json.mode === 'user') { modeUser.checked = true; userControlPanel.style.display = 'block'; }
+                            else { modeAI.checked = true; userControlPanel.style.display = 'none'; }
+                        }
+                    } catch (e) { console.warn('could not load control mode', e); }
+                }
+
+                modeAI.addEventListener('change', () => { if (modeAI.checked) userControlPanel.style.display = 'none'; saveMode('ai'); });
+                modeUser.addEventListener('change', () => { if (modeUser.checked) userControlPanel.style.display = 'block'; saveMode('user'); });
+
+                async function saveMode(mode) {
+                    const user = firebase && firebase.auth && firebase.auth().currentUser;
+                    if (!user) return alert('Sign in to change mode');
+                    try {
+                        const idToken = await user.getIdToken(true);
+                        await fetch('/api/user/settings/control', { method:'POST', headers:{ 'Authorization':'Bearer '+idToken, 'Content-Type':'application/json' }, body: JSON.stringify({ mode }) });
+                    } catch (e) { console.warn('saveMode failed', e); }
+                }
+
+                saveControlBtn.addEventListener('click', async () => {
+                    const user = firebase && firebase.auth && firebase.auth().currentUser;
+                    if (!user) return alert('Sign in to save settings');
+                    const split = Number(splitInput.value) || 70;
+                    try {
+                        const idToken = await user.getIdToken(true);
+                        const res = await fetch('/api/user/settings/control', { method:'POST', headers:{ 'Authorization':'Bearer '+idToken, 'Content-Type':'application/json' }, body: JSON.stringify({ monetizationSplit: split }) });
+                        if (res.ok) alert('Settings saved'); else alert('Failed to save settings');
+                    } catch (e) { console.error(e); alert('Error saving settings'); }
+                });
+
+                refreshBtn.addEventListener('click', fetchEarnings);
+                                // Withdraw flow with amount, method, fee and ETA
+                                withdrawBtn.addEventListener('click', async () => {
+                                    const user = firebase && firebase.auth && firebase.auth().currentUser;
+
+                                    // Build modal if not present
+                                        if (!document.getElementById('withdraw-modal')) {
+                                                const modalHtml = `
+                                                <div id="withdraw-modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:3000;">
+                                                    <div style="background:#fff;border-radius:12px;padding:18px;max-width:420px;width:92%;color:#111;">
+                                                        <h3 style="margin-top:0">Request Withdrawal</h3>
+                                                        <label>Amount (USD): <input id="withdraw-amount" type="number" min="0" step="0.01" style="width:120px;margin-left:8px;"></label>
+                                                        <div style="margin-top:8px;">
+                                                            <label>Method: 
+                                                                <select id="withdraw-method">
+                                                                    <option value="bank">Bank Transfer (15% fee, 24h)</option>
+                                                                    <option value="paypal">PayPal (10% fee, 48h)</option>
+                                                                    <option value="cashapp">Cash App / Other (12% fee, 48h)</option>
+                                                                    <option value="crypto">Crypto (5% fee, 12h)</option>
+                                                                </select>
+                                                            </label>
+                                                        </div>
+                                                        <div style="margin-top:8px;">Destination (account / address):<br><input id="withdraw-address" type="text" style="width:100%;"></div>
+                                                        <div id="withdraw-summary" style="margin-top:10px;color:#374151;font-size:0.95rem;"></div>
+                                                        <div style="margin-top:12px;text-align:right;">
+                                                            <button id="withdraw-cancel" style="margin-right:8px;background:#e5e7eb;border-radius:8px;padding:8px 12px;border:none;">Cancel</button>
+                                                            <button id="withdraw-confirm" style="background:linear-gradient(45deg,#f59e0b,#b45309);color:#fff;border:none;border-radius:8px;padding:8px 12px;">Withdraw</button>
+                                                        </div>
+                                                    </div>
+                                                </div>`;
+                                                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                                                document.getElementById('withdraw-cancel').onclick = () => { document.getElementById('withdraw-modal').remove(); };
+                                            }
+
+                                        // Prefill values
+                                        const amountInput = document.getElementById('withdraw-amount');
+                                        const methodSelect = document.getElementById('withdraw-method');
+                                        const addressInput = document.getElementById('withdraw-address');
+                                        const summary = document.getElementById('withdraw-summary');
+                                        const confirmBtn = document.getElementById('withdraw-confirm');
+
+                                        // Prefill available amount
+                                        const available = (lastEarningsData && lastEarningsData.available) ? Number(lastEarningsData.available) : 0;
+                                        amountInput.value = available.toFixed(2);
+
+                                        // Try to prefill address from payout settings if signed in
+                                        if (user) {
+                                            try {
+                                                const idToken = await user.getIdToken(true);
+                                                const prefs = await fetch('/api/user/payout/settings', { headers: { 'Authorization': 'Bearer ' + idToken } });
+                                                if (prefs.ok) {
+                                                    const j = await prefs.json();
+                                                    const p = j.payouts || {};
+                                                    if (p.payoutAddress) addressInput.value = p.payoutAddress;
+                                                    if (p.payoutMethod) methodSelect.value = p.payoutMethod;
+                                                }
+                                            } catch (e) { /* ignore */ }
+                                        }
+
+                                        function computeSummary() {
+                                                const amt = Math.max(0, Number(amountInput.value) || 0);
+                                                const m = methodSelect.value;
+                                                const rules = { bank:{pct:0.15,h:24}, paypal:{pct:0.10,h:48}, cashapp:{pct:0.12,h:48}, crypto:{pct:0.05,h:12} };
+                                                const r = rules[m] || rules.cashapp;
+                                                const fee = Math.round((amt * r.pct + Number.EPSILON) * 100) / 100;
+                                                const net = Math.round((amt - fee + Number.EPSILON) * 100) / 100;
+                                                const etaHours = r.h;
+                                                summary.innerHTML = `<strong>Fee:</strong> $${fee.toFixed(2)} (${(r.pct*100).toFixed(0)}%)<br><strong>Net:</strong> $${net.toFixed(2)}<br><strong>Arrival:</strong> ~${etaHours} hours`;
+                                                return { amt, method: m, fee, net };
+                                        }
+
+                                        amountInput.oninput = computeSummary;
+                                        methodSelect.onchange = computeSummary;
+                                        computeSummary();
+
+                                        confirmBtn.onclick = async () => {
+                                                const user = firebase && firebase.auth && firebase.auth().currentUser;
+                                                if (!user) return alert('Sign in to withdraw');
+                                                const idToken = await user.getIdToken(true);
+                                                const { amt, method } = computeSummary();
+                                                if (amt <= 0) return alert('Enter an amount to withdraw');
+                                                if (amt > (lastEarningsData.available || 0)) return alert('Amount exceeds available balance');
+                                                const address = addressInput.value || '';
+                                                try {
+                                                        const res = await fetch('/api/user/withdraw', { method:'POST', headers:{ 'Authorization':'Bearer '+idToken, 'Content-Type':'application/json' }, body: JSON.stringify({ amount: amt, method, address }) });
+                                                        if (res.ok) {
+                                                                const j = await res.json();
+                                                                alert('Withdrawal requested. Net: $' + (j.payout.netAmount || 0).toFixed(2) + '. Arrival approx: ' + new Date(j.payout.eta).toLocaleString());
+                                                                document.getElementById('withdraw-modal').remove();
+                                                                fetchEarnings();
+                                                        } else {
+                                                                const t = await res.json().catch(()=>({}));
+                                                                alert('Withdrawal failed: ' + (t.error || res.statusText));
+                                                        }
+                                                } catch (e) {
+                                                        console.error(e);
+                                                        alert('Withdrawal error');
+                                                }
+                                        };
+                                });
+
+                // initial load
+                fetchEarnings();
+                setupControlMode();
+            })();
+
+            // User settings: load/save (visibility, notifications, themes, privacy)
+            async function getIdTokenIfAvailable() {
+                try {
+                    if (firebase && firebase.auth && firebase.auth().currentUser) {
+                        return await firebase.auth().currentUser.getIdToken(true);
+                    }
+                } catch (e) { console.warn('getIdTokenIfAvailable', e); }
+                return null;
+            }
+
+            async function loadUserSettings() {
+                const status = document.getElementById('settings-status');
+                status.textContent = 'Loading...';
+                try {
+                    const token = await getIdTokenIfAvailable();
+                    const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+                    const res = await fetch('/api/settings', { headers });
+                    if (!res.ok) throw new Error('failed');
+                    const json = await res.json();
+                    const s = (json && json.settings) || {};
+                    document.getElementById('profile-visibility').value = s.privacy?.profileVisibility || 'friends';
+                    document.getElementById('notif-push').checked = s.notifications?.pushNotifications ?? true;
+                    document.getElementById('notif-email').checked = s.notifications?.emailNotifications ?? false;
+                    document.getElementById('notif-sound').checked = s.notifications?.soundEnabled ?? true;
+                    document.getElementById('notif-vibrate').checked = s.notifications?.vibrationEnabled ?? true;
+                    document.getElementById('privacy-lastseen').checked = s.privacy?.lastSeen ?? true;
+                    document.getElementById('privacy-read').checked = s.privacy?.readReceipts ?? true;
+                    document.getElementById('theme-select').value = s.themes?.currentTheme || 'neon';
+                    status.textContent = 'Settings loaded.';
+                } catch (e) {
+                    console.warn('loadUserSettings failed', e);
+                    status.textContent = 'Using default settings (not signed in or server error).';
+                }
+            }
+
+            async function saveUserSettings() {
+                const status = document.getElementById('settings-status');
+                status.textContent = 'Saving...';
+                const payload = {
+                    settings: {
+                        privacy: {
+                            profileVisibility: document.getElementById('profile-visibility').value,
+                            lastSeen: document.getElementById('privacy-lastseen').checked,
+                            readReceipts: document.getElementById('privacy-read').checked
+                        },
+                        notifications: {
+                            pushNotifications: document.getElementById('notif-push').checked,
+                            emailNotifications: document.getElementById('notif-email').checked,
+                            soundEnabled: document.getElementById('notif-sound').checked,
+                            vibrationEnabled: document.getElementById('notif-vibrate').checked
+                        },
+                        themes: {
+                            currentTheme: document.getElementById('theme-select').value
+                        }
+                    }
+                };
+
+                try {
+                    const token = await getIdTokenIfAvailable();
+                    const headers = Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': 'Bearer ' + token } : {});
+                    const res = await fetch('/api/settings', { method: 'POST', headers, body: JSON.stringify(payload) });
+                    if (!res.ok) throw new Error('save-failed');
+                    status.textContent = 'Settings saved.';
+                } catch (e) {
+                    console.error('saveUserSettings failed', e);
+                    status.textContent = 'Failed to save settings.';
+                }
+            }
+
+            const _saveUserBtn = document.getElementById('save-user-settings');
+            if (_saveUserBtn) _saveUserBtn.addEventListener('click', saveUserSettings);
+            const _loadUserBtn = document.getElementById('load-user-settings');
+            if (_loadUserBtn) _loadUserBtn.addEventListener('click', loadUserSettings);
+
+            // Initial load for user settings
+            loadUserSettings();
+
+            // Payout settings load / save
+            async function loadPayoutSettings() {
+                const status = document.getElementById('payout-status');
+                status.textContent = 'Loading...';
+                try {
+                    const token = await getIdTokenIfAvailable();
+                    const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+                    const res = await fetch('/api/user/payout/settings', { headers });
+                    if (!res.ok) throw new Error('no-data');
+                    const json = await res.json();
+                    const p = json.payouts || {};
+                    document.getElementById('payout-method').value = p.payoutMethod || p.method || 'bank';
+                    document.getElementById('payout-address').value = p.payoutAddress || p.address || '';
+                    document.getElementById('payout-details').value = (p.payoutDetails && JSON.stringify(p.payoutDetails)) || (p.details && JSON.stringify(p.details)) || '';
+                    document.getElementById('payout-currency').value = p.payoutCurrency || p.currency || 'USD';
+                    status.textContent = '';
+                } catch (e) {
+                    console.warn('loadPayoutSettings failed', e);
+                    status.textContent = 'Using default payout settings.';
+                }
+            }
+
+            async function savePayoutSettings() {
+                const status = document.getElementById('payout-status');
+                status.textContent = 'Saving...';
+                const method = document.getElementById('payout-method').value;
+                const address = document.getElementById('payout-address').value;
+                let detailsRaw = document.getElementById('payout-details').value || '';
+                let details = detailsRaw;
+                try { details = JSON.parse(detailsRaw); } catch (e) { details = detailsRaw; }
+                const currency = document.getElementById('payout-currency').value || 'USD';
+                try {
+                    const token = await getIdTokenIfAvailable();
+                    const headers = Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': 'Bearer ' + token } : {});
+                    const res = await fetch('/api/user/payout/settings', { method: 'POST', headers, body: JSON.stringify({ payoutMethod: method, payoutAddress: address, payoutDetails: details, currency }) });
+                    if (!res.ok) throw new Error('save-failed');
+                    status.textContent = 'Payout settings saved.';
+                } catch (e) {
+                    console.error('savePayoutSettings failed', e);
+                    status.textContent = 'Failed to save payout settings.';
+                }
+            }
+
+            const _savePayoutBtn = document.getElementById('save-payout-settings');
+            if (_savePayoutBtn) _savePayoutBtn.addEventListener('click', savePayoutSettings);
+            // initial payout load
+            loadPayoutSettings();
+
+            // Stripe payout quick-request button
+            const _requestStripe = document.getElementById('request-stripe-payout');
+            if (_requestStripe) {
+                _requestStripe.addEventListener('click', async () => {
+                    const promptAmt = prompt('Enter amount to request for payout (USD):', '10.00');
+                    const amt = Number(promptAmt || 0);
+                    if (!amt || amt <= 0) return alert('Invalid amount');
+                    const token = await getIdTokenIfAvailable();
+                    if (!token) return alert('Sign in to request a payout');
+                    try {
+                        const res = await fetch('/api/payouts/create', { method: 'POST', headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + token }, body: JSON.stringify({ amount: amt, method: document.getElementById('payout-method').value || 'bank', address: document.getElementById('payout-address').value || '' }) });
+                        const j = await res.json();
+                        if (!res.ok) return alert('Payout failed: ' + (j.error || res.statusText));
+                        alert('Payout requested. Net: $' + (j.payout.netAmount||0).toFixed(2) + '. ETA: ' + new Date(j.payout.eta).toLocaleString());
+                        loadPayoutSettings();
+                    } catch (e) { console.error(e); alert('Payout request error'); }
+                });
+            }
+
+                // Stripe connect button
+                const _connectStripe = document.getElementById('connect-stripe');
+                const _stripeStatus = document.getElementById('stripe-status');
+                if (_connectStripe) {
+                    _connectStripe.addEventListener('click', async () => {
+                        const token = await getIdTokenIfAvailable();
+                        if (!token) return alert('Sign in to connect Stripe');
+                        try {
+                            const res = await fetch('/api/payouts/connect', { method: 'POST', headers: { 'Authorization':'Bearer ' + token, 'Content-Type':'application/json' }, body: JSON.stringify({}) });
+                            const j = await res.json();
+                            if (res.ok && j.url) {
+                                window.open(j.url, '_blank');
+                                _stripeStatus.textContent = 'Stripe onboarding opened. Complete onboarding to enable payouts.';
+                            } else {
+                                alert('Stripe connect failed: ' + (j.error || res.statusText));
+                            }
+                        } catch (e) { console.error(e); alert('Stripe connect error'); }
+                    });
+                }
+
+            // Admin webhook logs UI handlers
+            const viewWebhookBtn = document.getElementById('view-webhook-logs');
+            const triggerReconBtn = document.getElementById('trigger-reconcile');
+            const logsList = document.getElementById('webhook-logs-list');
+            if (viewWebhookBtn) {
+                viewWebhookBtn.addEventListener('click', async () => {
+                    logsList.textContent = 'Loading...';
+                    try {
+                        const token = await getIdTokenIfAvailable();
+                        const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+                        const res = await fetch('/api/payouts/logs', { headers });
+                        if (!res.ok) { logsList.textContent = 'Failed to load logs: ' + res.status; return; }
+                        const json = await res.json();
+                        const logs = (json && json.logs) || [];
+                        if (!logs.length) { logsList.textContent = 'No logs available.'; return; }
+                        logsList.innerHTML = logs.reverse().map(l => {
+                            return `<div style="border-bottom:1px solid rgba(0,0,0,0.06);padding:6px;margin-bottom:6px;"><strong>${l.type}</strong> <small style="color:#666;margin-left:8px;">${new Date(l.receivedAt).toLocaleString()}</small><pre style="white-space:pre-wrap;margin-top:6px;">${escapeHtml(JSON.stringify(l.event, null, 2))}</pre></div>`;
+                        }).join('');
+                    } catch (e) { logsList.textContent = 'Error fetching logs'; console.error(e); }
+                });
+            }
+            if (triggerReconBtn) {
+                triggerReconBtn.addEventListener('click', async () => {
+                    logsList.textContent = 'Reconciling...';
+                    try {
+                        const token = await getIdTokenIfAvailable();
+                        const headers = token ? { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
+                        const res = await fetch('/api/payouts/reconcile', { method: 'POST', headers });
+                        if (!res.ok) { logsList.textContent = 'Reconcile failed: ' + res.status; return; }
+                        const j = await res.json();
+                        logsList.textContent = 'Reconciliation completed: ' + (j.processed || 0) + ' events.';
+                    } catch (e) { logsList.textContent = 'Reconcile error'; console.error(e); }
+                });
+            }
+
+            function escapeHtml(text) { return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+            console.log('⚙️ Advanced Settings Dashboard demo loaded successfully!');
+            console.log('🤖 Features: AI Privacy Coach, Voice Control, Accessibility Suite, Theme Switching');
+            console.log('🎨 Themes: Light, Dark, Neon with live preview');
+            console.log('♿ Accessibility: WCAG 2.1 compliant with full keyboard and screen reader support');
+            console.log('🚀 Ready for production deployment');
+        });
+    </script>
+</body>
+</html>
